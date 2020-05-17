@@ -69,5 +69,47 @@ namespace Tutorial10_APBD.Controllers
             
         }
 
+        [HttpDelete("deleteStudent{id}")]
+        public IActionResult GetStudents(string id)
+        {
+            var index = id;
+            var student = (from c in _studentContext.Student
+                           where c.IndexNumber == id
+                           select c).First();
+
+            if (student != null)
+            {
+                _studentContext.Student.Remove(student);
+                _studentContext.SaveChanges();
+                return Ok("Succesfully deleted");
+            }
+            else
+            {
+                return BadRequest("Succesfully deleted");
+
+            }
+
+        }
+
+        [HttpPut("updateStudent")]
+        public IActionResult UpdateStudent(Student s)
+        {
+            var student = (from c in
+                               _studentContext.Student
+                           where c.IndexNumber == s.IndexNumber
+                           select c).First();
+
+            if (student != null)
+            {
+                _studentContext.Update<Student>(s);
+                _studentContext.SaveChanges();
+                return Ok("Succesuflly Updated");
+            }
+            else
+            {
+                return BadRequest("Failed to Update");
+
+            }
+        }
     }
 }
